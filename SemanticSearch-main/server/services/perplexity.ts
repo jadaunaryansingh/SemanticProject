@@ -6,7 +6,8 @@ export class PerplexityService {
   private getApiKey(): string {
     const apiKey = process.env.PERPLEXITY_API_KEY ?? "";
     if (!apiKey) {
-      throw new Error('Missing PERPLEXITY_API_KEY environment variable');
+      console.error('ERROR: PERPLEXITY_API_KEY environment variable is not set');
+      throw new Error('Missing PERPLEXITY_API_KEY environment variable. Please set your Perplexity API key in the environment variables.');
     }
     return apiKey;
   }

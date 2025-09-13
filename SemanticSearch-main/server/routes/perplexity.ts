@@ -19,6 +19,15 @@ export const handlePerplexityQuery: RequestHandler = async (req, res) => {
     res.json(response);
   } catch (error) {
     console.error("Perplexity query error:", error);
+    
+    // Check if it's an API key error
+    if (error instanceof Error && error.message.includes('PERPLEXITY_API_KEY')) {
+      return res.status(400).json({
+        error: "Configuration Error",
+        message: "Perplexity API key is not configured. Please set the PERPLEXITY_API_KEY environment variable."
+      });
+    }
+    
     res.status(500).json({
       error: "Failed to process query",
       message: error instanceof Error ? error.message : "Unknown error"
@@ -66,6 +75,15 @@ export const handlePerplexityWithPDF: RequestHandler = async (req, res) => {
     res.json(response);
   } catch (error) {
     console.error("Perplexity PDF query error:", error);
+    
+    // Check if it's an API key error
+    if (error instanceof Error && error.message.includes('PERPLEXITY_API_KEY')) {
+      return res.status(400).json({
+        error: "Configuration Error",
+        message: "Perplexity API key is not configured. Please set the PERPLEXITY_API_KEY environment variable."
+      });
+    }
+    
     res.status(500).json({
       error: "Failed to process PDF query",
       message: error instanceof Error ? error.message : "Unknown error"
