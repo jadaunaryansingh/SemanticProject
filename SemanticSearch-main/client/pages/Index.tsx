@@ -77,14 +77,16 @@ export default function Index() {
     setResponse(null);
     
     try {
+      console.log('Sending query:', { query: query.trim(), pdfContentLength: doc?.length || 0 });
+      
       const response = await fetch('/api/perplexity/query-with-pdf', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          query,
-          pdfContent: doc
+          query: query.trim(),
+          pdfContent: doc || ''
         }),
       });
       
@@ -93,11 +95,12 @@ export default function Index() {
       if (response.ok) {
         setResponse(result);
       } else {
-        setError(result.message || 'Failed to get response from Perplexity');
+        console.error('API Error:', result);
+        setError(result.error || result.message || 'Failed to get response from Perplexity');
       }
     } catch (err) {
-      console.error(err);
-      setError('Failed to query Perplexity API');
+      console.error('Network Error:', err);
+      setError('Failed to query Perplexity API - check your connection');
     } finally {
       setLoading(false);
     }

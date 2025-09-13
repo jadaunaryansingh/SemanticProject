@@ -44,12 +44,18 @@ export const handlePerplexityWithPDF: RequestHandler = async (req, res) => {
       });
     }
 
+    // Make pdfContent optional - if not provided, we'll still process the query
     if (!pdfContent || pdfContent.trim() === '') {
-      console.log("ERROR: Missing or empty pdfContent");
-      return res.status(400).json({ 
-        error: "PDF content is required",
-        received: { queryLength: query?.length || 0, pdfContent }
+      console.log("WARNING: No PDF content provided, proceeding with query only");
+      // Instead of returning 400, we'll proceed with just the query
+      const response: PerplexityResponse = await perplexityService.query({
+        query,
+        pdfContent: undefined,
+        model: "sonar-pro"
       });
+      
+      console.log("✓ Perplexity response received (query only)");
+      return res.json(response);
     }
 
     console.log("✓ Validation passed - Query length:", query.length, "PDF content length:", pdfContent.length);
