@@ -31,8 +31,12 @@ export function createServer() {
   });
 
   // Simple test endpoint for Perplexity API
-  app.post("/api/test-perplexity", async (_req, res) => {
+  app.post("/api/test-perplexity", async (req, res) => {
     try {
+      console.log("=== Test Perplexity Endpoint ===");
+      console.log("Body:", JSON.stringify(req.body, null, 2));
+      console.log("Body type:", typeof req.body);
+      
       if (!process.env.PERPLEXITY_API_KEY) {
         return res.status(400).json({
           error: "PERPLEXITY_API_KEY not set",
@@ -43,7 +47,8 @@ export function createServer() {
       res.json({
         status: "API key is configured",
         environment: process.env.NODE_ENV,
-        keyPreview: process.env.PERPLEXITY_API_KEY.substring(0, 10) + "..."
+        keyPreview: process.env.PERPLEXITY_API_KEY.substring(0, 10) + "...",
+        receivedBody: req.body
       });
     } catch (error) {
       res.status(500).json({

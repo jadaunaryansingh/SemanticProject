@@ -60,6 +60,9 @@ export const handlePerplexityWithPDF: RequestHandler = async (req, res) => {
       const buffer = Buffer.from(req.body.data);
       requestBody = JSON.parse(buffer.toString());
       console.log("Parsed body:", JSON.stringify(requestBody, null, 2));
+    } else {
+      console.log("Using body as-is (not a Buffer)");
+      requestBody = req.body;
     }
     
     const { query, pdfContent }: { query: string; pdfContent: string } = requestBody;
